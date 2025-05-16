@@ -1,20 +1,30 @@
 // Copyright MIET, Inc. All Rights Reserved.
-#include "PlatformMovementComponent.h"
+#include "Public/MovingObject.h"
 
-// Конструктор
-UPlatformMovementComponent::UPlatformMovementComponent()
+UMovingObject::UMovingObject()
 {
-    PrimaryComponentTick.bCanEverTick = true;
 }
 
+// Конструктор
+/*UMovingObject::UMovingObject(const TArray<FVector>& Points) : Points(Points) {
+    PrimaryComponentTick.bCanEverTick = true;
+}
+UMovingObject::UMovingObject(const TArray<FVector>& Points, const int32& CurrentPointIndex, float Speed)
+    : Points(Points), CurrentPointIndex(CurrentPointIndex), Speed(Speed)
+{
+    PrimaryComponentTick.bCanEverTick = true;
+}*/
+
+
+
 // Метод для получения индекса целевой точки
-int32 UPlatformMovementComponent::GetTargetPointIndex() const
+int32 UMovingObject::GetTargetPointIndex() const
 {
     return (CurrentPointIndex + 1) % Points.Num();
 }
 
 // Метод для проверки достижения целевой точки
-bool UPlatformMovementComponent::IsReachedTargetPoint() const
+bool UMovingObject::IsReachedTargetPoint() const
 {
     if (Points.Num() == 0)
     {
@@ -31,23 +41,23 @@ bool UPlatformMovementComponent::IsReachedTargetPoint() const
 }
 
 // Вызывается при добавлении компонента к актеру
-void UPathFollowerComponent::BeginPlay() {
+void UMovingObject::BeginPlay() {
     Super::BeginPlay();
 
-    if (!ensure(PathPoints.Num() > 0)) return;
+    if (!ensure(Points.Num() > 0)) return;
 }
 
 // Основной цикл обновления позиции
-void UPathFollowerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
+void UMovingObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-    if (CurrentIndex >= PathPoints.Num()) return;
+    if (CurrentPointIndex >= Points.Num()) return;
 
-    const auto TargetPosition = PathPoints[CurrentIndex];
+    const auto TargetPosition = Points[CurrentPointIndex];
     const auto DistanceToTarget = GetOwner()->GetActorLocation().Distance(TargetPosition);
 
     if (DistanceToTarget <= 1.f) { // Если достигли целевой точки
-        ++CurrentIndex;
+        ++CurrentPointIndex;
         return;
     }
 
@@ -55,3 +65,4 @@ void UPathFollowerComponent::TickComponent(float DeltaTime, ELevelTick TickType,
     const auto Direction = (TargetPosition - GetOwner()->GetActorLocation()).GetSafeNormal();
     GetOwner()->AddActorWorldOffset(Direction * Speed * DeltaTime);
 }
+
