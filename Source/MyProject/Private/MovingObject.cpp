@@ -1,5 +1,5 @@
 // Copyright MIET, Inc. All Rights Reserved.
-#include "Public/MovingObject.h"
+#include "MovingObject.h"
 
 UMovingObject::UMovingObject()
 {
@@ -18,7 +18,7 @@ UMovingObject::UMovingObject(const TArray<FVector>& Points, const int32& Current
 
 
 // Метод для получения индекса целевой точки
-int32 UMovingObject::GetTargetPointIndex() const
+int UMovingObject::GetTargetPointIndex() const
 {
     return (CurrentPointIndex + 1) % Points.Num();
 }
@@ -54,7 +54,7 @@ void UMovingObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
     if (CurrentPointIndex >= Points.Num()) return;
 
     const auto TargetPosition = Points[CurrentPointIndex];
-    const auto DistanceToTarget = GetOwner()->GetActorLocation().Distance(TargetPosition);
+    const auto DistanceToTarget = FVector::Distance(GetOwner()->GetActorLocation(), TargetPosition);
 
     if (DistanceToTarget <= 1.f) { // Если достигли целевой точки
         ++CurrentPointIndex;

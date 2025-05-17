@@ -18,19 +18,19 @@ public:
     //UMovingObject(const TArray<FVector>& Points, const int32& CurrentPointIndex, float Speed);
 
     // Массив точек, по которым движется платформа
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object Movement");
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object Movement")
     TArray<FVector> Points;
     // Индекс текущей точки
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object Movement");
-    int32 CurrentPointIndex = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object Movement")
+    int CurrentPointIndex = 0;
     // Скорость движения платформы
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object Movement");
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object Movement")
     float Speed = 500.0f;
     // Метод для получения индекса целевой точки
-    UFUNCTION(BlueprintPure, Category = "Object Movement");
-    int32 GetTargetPointIndex() const;
+    UFUNCTION(BlueprintPure, Category = "Object Movement")
+    int GetTargetPointIndex() const;
     // Метод для проверки достижения целевой точки
-    UFUNCTION(BlueprintPure, Category = "Object Movement");
+    UFUNCTION(BlueprintPure, Category = "Object Movement")
     bool IsReachedTargetPoint() const;
 
 protected:
